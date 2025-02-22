@@ -56,9 +56,9 @@ class Ollama:
         subprocess.run(["systemctl", "start", "ollama"])
 
     @method()
-    def infer(self, text: str, verbose: bool = False):
+    def infer(self, messages: list, verbose: bool = False):
         stream = ollama.chat(
-            model=MODEL, messages=[{"role": "user", "content": text}], stream=False
+            model=MODEL, messages=messages, stream=False
         )
         return stream['message']['content']
 
@@ -66,10 +66,13 @@ class Ollama:
 # Convenience thing, to run using:
 #
 #  $ modal run ollama-modal.py [--lookup] [--text "Why is the sky blue?"]
-@app.local_entrypoint()
-def main(text: str = "Why is the sky blue?", lookup: bool = False):
+# @app.local_entrypoint()
+@app.function()
+@modal.web_endpoint(method="POST")
+def main(request: dict, text: str = "Why is the sky blue?", lookup: bool = False):
     if lookup:
         ollama = modal.Cls.lookup("ollama", "Ollama")
     else:
         ollama = Ollama()
-    print(ollama.infer.remote(text))
+    res = ollama.infer.remote(request['messages'])
+    return {"choices" : [{"role" : "assistant", "content" : res['message']['content']}]}
