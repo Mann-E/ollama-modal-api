@@ -75,4 +75,4 @@ def main(request: dict, text: str = "Why is the sky blue?", lookup: bool = False
     else:
         ollama = Ollama()
     res = ollama.infer.remote(request['messages'])
-    return {"choices" : [{"role" : "assistant", "content" : res['message']['content']}]}
+    return {"choices" : [{"role" : "assistant", "content" : res}]}
