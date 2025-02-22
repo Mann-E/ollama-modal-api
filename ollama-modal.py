@@ -26,7 +26,7 @@ image = (
         "usermod -a -G ollama $(whoami)",
     )
     .copy_local_file("ollama.service", "/etc/systemd/system/ollama.service")
-    .pip_install("ollama")
+    .pip_install("ollama", "fastapi[standard]")
     .run_function(pull)
 )
 
