@@ -5,7 +5,7 @@ import time
 
 from modal import build, enter, method
 
-MODEL = os.environ.get("MODEL", "mistral-small")
+MODEL = os.environ.get("MODEL", "mistral-large")
 
 
 def pull(model: str = MODEL):
@@ -36,7 +36,7 @@ with image.imports():
     import ollama
 
 
-@app.cls(gpu="h100", container_idle_timeout=300)
+@app.cls(gpu="h100:4", container_idle_timeout=300)
 class Ollama:
     @build()
     def pull(self):
