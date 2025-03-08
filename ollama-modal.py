@@ -5,7 +5,7 @@ import time
 
 from modal import build, enter, method
 
-MODEL = os.environ.get("MODEL", "gemma2:27b")
+MODEL = os.environ.get("MODEL", "haghiri/hormoz-8b:iq_nl4")
 
 
 def pull(model: str = MODEL):
