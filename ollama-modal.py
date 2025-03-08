@@ -5,7 +5,7 @@ import time
 
 from modal import build, enter, method
 
-MODEL = os.environ.get("MODEL", "mistral-small")
+MODEL = os.environ.get("MODEL", "gemma2:27b")
 
 
 def pull(model: str = MODEL):
