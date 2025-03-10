@@ -3,76 +3,64 @@ import os
 import subprocess
 import time
 
-from modal import build, enter, method
+cuda_version = "12.4.0"
+flavor = "devel"
+operating_sys = "ubuntu22.04"
+tag = f"{cuda_version}-{flavor}-{operating_sys}"
 
 MODEL = os.environ.get("MODEL", "gemma2:27b")
 
+# Function to initialize and pull the model
+def pull_model(model: str = MODEL):
+    subprocess.run(["systemctl", "daemon-reload"], check=True)
+    subprocess.run(["systemctl", "enable", "ollama"], check=True)
+    subprocess.run(["systemctl", "start", "ollama"], check=True)
+    time.sleep(2)  # Wait for the service to start
+    subprocess.run(["ollama", "pull", model], stdout=subprocess.PIPE, check=True)
 
-def pull(model: str = MODEL):
-    subprocess.run(["systemctl", "daemon-reload"])
-    subprocess.run(["systemctl", "enable", "ollama"])
-    subprocess.run(["systemctl", "start", "ollama"])
-    time.sleep(2)  # 2s, wait for the service to start
-    subprocess.run(["ollama", "pull", model], stdout=subprocess.PIPE)
-
-
-image = (
-    modal.Image.debian_slim()
+# Define the Modal image with dependencies and setup
+ollama_image = (
+    modal.Image.from_registry(f"nvidia/cuda:{tag}", add_python="3.11")
     .apt_install("curl", "systemctl")
-    .run_commands(  # from https://github.com/ollama/ollama/blob/main/docs/linux.md
+    .run_commands(
         "curl -L https://ollama.com/download/ollama-linux-amd64.tgz -o ollama-linux-amd64.tgz",
         "tar -C /usr -xzf ollama-linux-amd64.tgz",
         "useradd -r -s /bin/false -U -m -d /usr/share/ollama ollama",
         "usermod -a -G ollama $(whoami)",
     )
     .copy_local_file("ollama.service", "/etc/systemd/system/ollama.service")
-    .pip_install("ollama", "fastapi[standard]")
-    .run_function(pull)
+    .pip_install("ollama==0.1.0", "fastapi[standard]")
+    .run_function(pull_model)
 )
 
-app = modal.App(name="ollama", image=image)
+app = modal.App(name="ollama", image=ollama_image)
 
-with image.imports():
+with ollama_image.imports():
     import ollama
 
+MINUTES = 60
 
-@app.cls(gpu="h100", container_idle_timeout=300)
+@app.cls(
+    gpu="H100",
+    container_idle_timeout=5 * MINUTES,
+    timeout=60 * MINUTES,
+    volumes={
+        "/cache": modal.Volume.from_name("hf-hub-cache", create_if_missing=True),
+    },
+)
 class Ollama:
-    @build()
-    def pull(self):
-        # TODO(irfansharif): Was hoping that the following would use an image
-        # with this explicit @build() step's results, but alas, it doesn't - so
-        # we're baking it directly into the base image above. Also, would be
-        # nice to simply specify the class name? Not like the method is
-        # specified has any relevance.
-        #
-        #  $ modal shell ollama-modal.py::Ollama.infer
+    @modal.enter()
+    def enter(self):
+        subprocess.run(["systemctl", "start", "ollama"], check=True)
 
-        pull(model=MODEL)
-        
+    @modal.method()
+    def infer(self, messages: list) -> str:
+        response = ollama.chat(model=MODEL, messages=messages, stream=False)
+        return response["message"]["content"]
 
-    @enter()
-    def load(self):
-        subprocess.run(["systemctl", "start", "ollama"])
-
-    @method()
-    def infer(self, messages: list, verbose: bool = False):
-        stream = ollama.chat(
-            model=MODEL, messages=messages, stream=False
-        )
-        return stream['message']['content']
-
-
-# Convenience thing, to run using:
-#
-#  $ modal run ollama-modal.py [--lookup] [--text "Why is the sky blue?"]
-# @app.local_entrypoint()
 @app.function()
 @modal.web_endpoint(method="POST")
-def main(request: dict, text: str = "Why is the sky blue?", lookup: bool = False):
-    if lookup:
-        ollama = modal.Cls.lookup("ollama", "Ollama")
-    else:
-        ollama = Ollama()
-    res = ollama.infer.remote(request['messages'])
-    return {"choices" : [{"role" : "assistant", "content" : res}]}
+def main(request: dict):
+    messages = request.get("messages", [])
+    response = Ollama().infer.remote(messages)
+    return {"choices": [{"role": "assistant", "content": response}]}
