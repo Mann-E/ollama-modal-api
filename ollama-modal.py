@@ -28,7 +28,7 @@ ollama_image = (
         "useradd -r -s /bin/false -U -m -d /usr/share/ollama ollama",
         "usermod -a -G ollama $(whoami)",
     )
-    .copy_local_file("ollama.service", "/etc/systemd/system/ollama.service")
+    .add_local_file("ollama.service", "/etc/systemd/system/ollama.service", copy=True)
     .pip_install("ollama==0.1.0", "fastapi[standard]")
     .run_function(pull_model)
 )
