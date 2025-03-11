@@ -31,6 +31,10 @@ The request is a simple JSON object like the following:
 }
 ```
 
+Remember that this API is _NOT_ OpenAI compatible, but since the result and request body is identical to OpenAI's, you may be able to make it a part of an OpenAI compatible API. 
+
+### Sample request
+
 ## Tested models (Ollama Repository IDs) and GPU's
 
 - `gemma2:9b` : `a10g` (Default tests)
