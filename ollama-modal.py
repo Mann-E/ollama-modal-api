@@ -30,7 +30,7 @@ ollama_image = (
     )
     .add_local_file("ollama.service", "/etc/systemd/system/ollama.service", copy=True)
     .pip_install("ollama==0.1.0", "fastapi[standard]")
-    .run_function(pull_model)
+    .run_function(pull_model, force_build=True)
 )
 
 app = modal.App(name="ollama", image=ollama_image)
