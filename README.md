@@ -12,6 +12,8 @@ modal serve ollama-modal.py
 modal deploy ollama-modal.py
 ```
 
+## API Interaction 
+
 ## Tested models (Ollama Repository IDs) and GPU's
 
 - `gemma2:9b` : `a10g` (Default tests)
