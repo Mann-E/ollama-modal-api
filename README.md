@@ -16,6 +16,21 @@ modal deploy ollama-modal.py
 
 When you `serve` or `deploy` your Ollama instance to modal, you will get a link like `https://your-org-name--your-app-name-main-dev.modal.run`. This name will be appeared to you just after running one of the above commands and you can use it in curl, python code, etc. 
 
+### Request structure 
+
+The request is a simple JSON object like the following:
+
+```json
+{
+    "messages" : [
+        {
+            "role" : "user",
+            "content" : "What is the answer to universe, life and everything?"
+        }
+    ]
+}
+```
+
 ## Tested models (Ollama Repository IDs) and GPU's
 
 - `gemma2:9b` : `a10g` (Default tests)
