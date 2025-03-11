@@ -35,6 +35,19 @@ Remember that this API is _NOT_ OpenAI compatible, but since the result and requ
 
 ### Sample request
 
+```bash
+curl --location --request POST 'https://your-org-name--your-app-name-main-dev.modal.run' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "messages" : [
+        {
+            "role" : "user",
+            "content" : "write a joke on Elon Musk"
+        }
+    ]
+}'
+```
+
 ## Tested models (Ollama Repository IDs) and GPU's
 
 - `gemma2:9b` : `a10g` (Default tests)
