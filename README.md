@@ -61,3 +61,4 @@ curl --location --request POST 'https://your-org-name--your-app-name-main-dev.mo
 - `mistral-large` : `h100:4` (gets too expensive)
 - `SIGJNF/deepseek-r1-671b-1.58bit` : `h100:4` (gets too expensive)
 - `haghiri/jabir-400b:q4_k` : `h100:4` (gets too expensive)
+- `gemma3:27b` : `h100`
