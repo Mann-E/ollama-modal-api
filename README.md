@@ -62,3 +62,4 @@ curl --location --request POST 'https://your-org-name--your-app-name-main-dev.mo
 - `SIGJNF/deepseek-r1-671b-1.58bit` : `h100:4` (gets too expensive)
 - `haghiri/jabir-400b:q4_k` : `h100:4` (gets too expensive)
 - `gemma3:27b` : `h100`
+- `gemma3:12b` : tested on `h100` but less is also possible.
