@@ -63,3 +63,4 @@ curl --location --request POST 'https://your-org-name--your-app-name-main-dev.mo
 - `haghiri/jabir-400b:q4_k` : `h100:4` (gets too expensive)
 - `gemma3:27b` : `h100`
 - `gemma3:12b` : tested on `h100` but less is also possible.
+- `gemma3:4b` : `a100` or `a10g`
