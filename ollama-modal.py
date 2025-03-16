@@ -23,7 +23,7 @@ ollama_image = (
     modal.Image.from_registry(f"nvidia/cuda:{tag}", add_python="3.11")
     .apt_install("curl", "systemctl")
     .run_commands(
-        "curl -L https://github.com/ollama/ollama/releases/download/v0.6.0/ollama-linux-amd64.tgz -o ollama-linux-amd64.tgz",
+        "curl -L https://github.com/ollama/ollama/releases/download/v0.6.1/ollama-linux-amd64.tgz -o ollama-linux-amd64.tgz",
         "tar -C /usr -xzf ollama-linux-amd64.tgz",
         "useradd -r -s /bin/false -U -m -d /usr/share/ollama ollama",
         "usermod -a -G ollama $(whoami)",
