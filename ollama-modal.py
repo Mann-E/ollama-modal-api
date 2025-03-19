@@ -42,7 +42,7 @@ MINUTES = 60
 
 @app.cls(
     gpu="H100",
-    container_idle_timeout=5 * MINUTES,
+    scaledown_window=5 * MINUTES,
     timeout=60 * MINUTES,
     volumes={
         "/cache": modal.Volume.from_name("hf-hub-cache", create_if_missing=True),
