@@ -41,7 +41,7 @@ with ollama_image.imports():
 MINUTES = 60
 
 @app.cls(
-    gpu="H100:4",
+    gpu="H100",
     scaledown_window=5 * MINUTES,
     timeout=60 * MINUTES,
     volumes={
