@@ -67,3 +67,4 @@ curl --location --request POST 'https://your-org-name--your-app-name-main-dev.mo
 - `gemma3:1b` : Basically works on CPU like a charm.
 - `exaone` : `L40S`
 - `exaone:32b` : `A100`
+- `command-a` : `H100:4` (gets too expensive)
