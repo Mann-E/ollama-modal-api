@@ -8,7 +8,7 @@ flavor = "devel"
 operating_sys = "ubuntu22.04"
 tag = f"{cuda_version}-{flavor}-{operating_sys}"
 
-MODEL = os.environ.get("MODEL", "gemma3:27b")
+MODEL = os.environ.get("MODEL", "command-a")
 
 # Function to initialize and pull the model
 def pull_model(model: str = MODEL):
@@ -41,7 +41,7 @@ with ollama_image.imports():
 MINUTES = 60
 
 @app.cls(
-    gpu="H100",
+    gpu="H100:4",
     scaledown_window=5 * MINUTES,
     timeout=60 * MINUTES,
     volumes={
