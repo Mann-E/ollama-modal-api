@@ -20,7 +20,7 @@ def pull_model(model: str = MODEL):
 
 # Define the Modal image with dependencies and setup
 ollama_image = (
-    modal.Image.Image.debian_slim(python_version="3.12")
+    modal.Image.debian_slim(python_version="3.12")
     .apt_install("curl", "systemctl")
     .run_commands(
         "curl -L https://github.com/ollama/ollama/releases/download/v0.6.2/ollama-linux-amd64.tgz -o ollama-linux-amd64.tgz",
