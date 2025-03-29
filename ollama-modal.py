@@ -8,7 +8,7 @@ flavor = "devel"
 operating_sys = "ubuntu22.04"
 tag = f"{cuda_version}-{flavor}-{operating_sys}"
 
-MODEL = os.environ.get("MODEL", "hf.co/openvoyage/txt2vec-0.0.1-GGUF:Q8_0")
+MODEL = os.environ.get("MODEL", "gemma3:27b")
 
 # Function to initialize and pull the model
 def pull_model(model: str = MODEL):
@@ -20,7 +20,7 @@ def pull_model(model: str = MODEL):
 
 # Define the Modal image with dependencies and setup
 ollama_image = (
-    modal.Image.from_registry(f"nvidia/cuda:{tag}", add_python="3.11")
+    modal.Image.Image.debian_slim(python_version="3.12")
     .apt_install("curl", "systemctl")
     .run_commands(
         "curl -L https://github.com/ollama/ollama/releases/download/v0.6.1/ollama-linux-amd64.tgz -o ollama-linux-amd64.tgz",
