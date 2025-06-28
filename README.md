@@ -54,6 +54,7 @@ curl --location --request POST 'https://your-org-name--your-app-name-main-dev.mo
 
 ## Tested models (Ollama Repository IDs) and GPU's
 
+- `qwen3:14b` : `a100` (May work fine on smaller GPU as well.)
 - `gemma2:9b` : `a10g` (Default tests)
 - `gemma2:27b` : `a100`
 - `haghiri/hormoz:iq4_nl` : `a100`, `h100` (and due to the size, it is fine on `a10g` as well.)
