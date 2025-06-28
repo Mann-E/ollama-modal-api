@@ -23,7 +23,7 @@ ollama_image = (
     modal.Image.debian_slim(python_version="3.12")
     .apt_install("curl", "systemctl")
     .run_commands(
-        "curl -L https://github.com/ollama/ollama/releases/download/v0.6.2/ollama-linux-amd64.tgz -o ollama-linux-amd64.tgz",
+        "curl -L https://github.com/ollama/ollama/releases/download/v0.9.3/ollama-linux-amd64.tgz -o ollama-linux-amd64.tgz",
         "tar -C /usr -xzf ollama-linux-amd64.tgz",
         "useradd -r -s /bin/false -U -m -d /usr/share/ollama ollama",
         "usermod -a -G ollama $(whoami)",
