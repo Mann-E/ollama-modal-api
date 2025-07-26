@@ -33,7 +33,7 @@ ollama_image = (
     .run_function(pull_model, force_build=True)
 )
 
-app = modal.App(name="ollama", image=ollama_image)
+app = modal.App(name="distill", image=ollama_image)
 
 with ollama_image.imports():
     import ollama
