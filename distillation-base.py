@@ -8,7 +8,7 @@ flavor = "devel"
 operating_sys = "ubuntu22.04"
 tag = f"{cuda_version}-{flavor}-{operating_sys}"
 
-MODEL = os.environ.get("MODEL", "command-a")
+MODEL = os.environ.get("MODEL", "gemma3:27b")
 
 # Function to initialize and pull the model
 def pull_model(model: str = MODEL):
